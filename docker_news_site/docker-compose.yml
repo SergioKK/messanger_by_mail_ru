@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  web:
+    build: .
+    command: python news_site/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    links:
+      - process_task
+    depends_on:
+      - db
+  process_task:
+    build: .
+    command: python news_site/manage.py process_tasks
+    volumes:
+      - .:/code
+
+
+
+
+
